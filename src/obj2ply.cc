@@ -1,6 +1,7 @@
 #include <igl/readOBJ.h>
 #include <igl/writePLY.h>
 #include <string>
+#include <exception>
 
 bool has_suffix(const std::string &str, const std::string &suffix)
 {
@@ -25,9 +26,20 @@ int main(int argc, char* argv[])
 		if (ouf.empty())
 			continue;
 		Eigen::MatrixXd V;
+		Eigen::MatrixXd TC;
+		Eigen::MatrixXd CN;
+		Eigen::MatrixXd FTC;
+		Eigen::MatrixXd FN;
 		Eigen::MatrixXi F;
-		igl::readOBJ(inf, V, F);
-		igl::writePLY(ouf, V, F);
+		try {
+			igl::readOBJ(inf, V, TC, CN, F, FTC, FN);
+			igl::writePLY(ouf, V, F, CN, TC, false);
+		} catch (std::exception ex) {
+			std::cerr << "no normals or texture coordinates in OBJ" << std::endl 
+					  << "exception occured: " << ex.what() << std::endl;
+			igl::readOBJ(inf, V, F);
+			igl::writePLY(ouf, V, F);
+		}
 	}
 	return 0;
 }

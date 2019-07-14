@@ -9,6 +9,8 @@ find_package(Threads REQUIRED)
 include_directories(${IGL_INCLUDE_DIR})
 include_directories(${EIGEN3_INCLUDE_DIR})
 
+set (CMAKE_CXX_STANDARD 11)
+
 ADD_EXECUTABLE(obj2ply src/obj2ply.cc)
 ADD_EXECUTABLE(ply2obj src/ply2obj.cc)
 ADD_EXECUTABLE(obj2m src/obj2m.cc)
